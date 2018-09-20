@@ -10,7 +10,7 @@ class Api::V1::ProjectsController < ApplicationController
     render json: @project
   end
 
-  def new
+  def create
     @project = Project.new(project_params)
     if @project.save
       render json: @project

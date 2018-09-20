@@ -10,7 +10,7 @@ class Api::V1::CommentsController < ApplicationController
     render json: @comment
   end
 
-  def new
+  def create
     @comment = Comment.new(comment_params)
     if @comment.save
       render json: @comment

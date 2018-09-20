@@ -10,7 +10,7 @@ class Api::V1::NotesController < ApplicationController
     render json: @note
   end
 
-  def new
+  def create
     @note = Note.new(note_params)
     if @note.save
       render json: @note
@@ -31,7 +31,7 @@ class Api::V1::NotesController < ApplicationController
   private
 
   def note_params
-    params.require(:note).permit(:content, :timecode, :completed, :project_id, :user_id, :comments)
+    params.permit(:content, :timecode, :completed, :project_id, :user_id)
   end
 
   def find_note
