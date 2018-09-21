@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       resources :projects
       resources :notes
       resources :comments
+      post '/login', to: 'auth#create'
+      get '/profile', to: 'users#profile'
     end
   end
 end
