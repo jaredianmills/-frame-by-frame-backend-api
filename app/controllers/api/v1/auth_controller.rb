@@ -1,5 +1,5 @@
 class Api::V1::AuthController < ApplicationController
-  skip_before_action :authorized, only: %i[create]
+  skip_before_action :authorized, only: [:create]
 
   def create
     @user = User.find_by(email: user_login_params[:email])
@@ -14,11 +14,7 @@ class Api::V1::AuthController < ApplicationController
   private
 
   def user_login_params
-    params.require(:user).permit(:username, :password)
+    params.require(:user).permit(:email, :password)
   end
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> master
 end
