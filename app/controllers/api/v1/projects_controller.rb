@@ -19,6 +19,7 @@ class Api::V1::ProjectsController < ApplicationController
       # @project.video.purge
       @project.video.attach(params[:video])
       @project.video_url = @project.video.service_url
+      # @project.video_url = url_for(@project.video)
       @project.save
       render json: @project
     else
@@ -39,7 +40,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:title, :video, :user_id)
+    params.permit(:title, :video, :user_id, :user_email)
   end
 
   def find_project
