@@ -15,7 +15,8 @@ class Api::V1::NotesController < ApplicationController
     if @note.save
       render json: @note
     else
-      render json: {errors: "There was an error creating your note"}
+      # render json: {errors: "There was an error creating your note"}
+      render json: { errors: @note.errors.full_messages }, status: :unprocessible_entity
     end
   end
 

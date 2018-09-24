@@ -1,5 +1,6 @@
 class Api::V1::ProjectsController < ApplicationController
   before_action :find_project, only: [:show, :update]
+  before_action :set_storage_url, only: [:create, :show]
 
   def index
     @projects = Project.all
@@ -11,11 +12,18 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(project_params)
+    @project = Project.new(title: project_params[:title], video: project_params[:video])
+    user = User.find(project_params[:user_id])
+    @project.users << user
     if @project.save
+      # @project.video.purge
+      @project.video.attach(params[:video])
+      @project.video_url = @project.video.service_url
+      @project.save
       render json: @project
     else
-      render json: {errors: "There was an error creating your project"}
+      render json: { errors: @project.errors.full_messages }
+      {errors: "There was an error creating your project"}
     end
   end
 
@@ -31,10 +39,15 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :video_url, :users, :notes, :comments)
+    params.permit(:title, :video, :user_id)
   end
 
   def find_project
     @project = Project.find(params[:id])
   end
+
+  def set_storage_url
+    ActiveStorage::Current.host = request.base_url
+  end
+
 end

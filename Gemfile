@@ -16,6 +16,7 @@ gem 'puma', '~> 3.11'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'figaro'
+gem 'aws-sdk', '~> 3', require: false
 
 gem 'active_model_serializers'
 
