@@ -24,7 +24,7 @@ class Api::V1::ProjectsController < ApplicationController
       render json: @project
     else
       render json: { errors: @project.errors.full_messages }
-      {errors: "There was an error creating your project"}
+      # {errors: "There was an error creating your project"}
     end
   end
 
@@ -32,7 +32,6 @@ class Api::V1::ProjectsController < ApplicationController
     if user = User.find_by(email: project_params[:user_email])
       @project.users << user
     else
-      byebug
       render json: { errors: "Unable to find that user"}, status: :unprocessible_entity
     end
     # user = User.find_by(email: project_params[:user_email])
