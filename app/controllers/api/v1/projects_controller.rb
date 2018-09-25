@@ -31,6 +31,7 @@ class Api::V1::ProjectsController < ApplicationController
   def update
     if user = User.find_by(email: project_params[:user_email])
       @project.users << user
+      render json: @project
     else
       render json: { errors: "Unable to find that user"}, status: :unprocessible_entity
     end
