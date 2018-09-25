@@ -29,12 +29,19 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def update
-    @project.update(project_params)
-    if @project.save
-      render json: @project, status: :accepted
+    if user = User.find_by(email: project_params[:user_email])
+      @project.users << user
     else
-      render json: { errors: @project.errors.full_messages }, status: :unprocessible_entity
+      byebug
+      render json: { errors: "Unable to find that user"}, status: :unprocessible_entity
     end
+    # user = User.find_by(email: project_params[:user_email])
+    # @project.update(project_params)
+    # if @project.save
+    #   render json: @project, status: :accepted
+    # else
+    #   render json: { errors: @project.errors.full_messages }, status: :unprocessible_entity
+    # end
   end
 
   private
