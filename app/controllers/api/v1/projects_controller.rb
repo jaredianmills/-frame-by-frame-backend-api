@@ -12,20 +12,23 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(title: project_params[:title], video_url: project_params[:video_url])
+    # byebug
+    @project = Project.new(project_params)
+    byebug
+    @project.video.attach(project_params[:video])
+    @project.video_url = rails_blob_path(@project.video, disposition: 'attachment')
     user = User.find(project_params[:user_id])
     @project.users << user
     if @project.save
-      # @project.video.purge
-      # @project.video.attach(params[:video])
-      # @project.video_url = @project.video.service_url
-      # @project.video_url = url_for(@project.video)
+      @project.video.purge
+      # byebug
+      # # @project.video_url = url_for(@project.video)
       # @project.save
+      byebug
       render json: @project
     else
+      byebug
       render json: {error: "There was an error creating your project"}
-      # { errors: @project.errors.full_messages }
-      # {errors: "There was an error creating your project"}
     end
   end
 
@@ -52,7 +55,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:title, :video_url, :user_id, :user_email)
+    params.permit(:title, :user_id, :video)
   end
 
   def find_project
