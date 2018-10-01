@@ -12,22 +12,15 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def create
-    # byebug
-    @project = Project.new(project_params)
-    byebug
+    @project = Project.new(title: project_params[:title])
     @project.video.attach(project_params[:video])
-    @project.video_url = rails_blob_path(@project.video, disposition: 'attachment')
+    @project.video_url = url_for(@project.video)
     user = User.find(project_params[:user_id])
     @project.users << user
     if @project.save
-      @project.video.purge
-      # byebug
-      # # @project.video_url = url_for(@project.video)
-      # @project.save
-      byebug
+      @project.save
       render json: @project
     else
-      byebug
       render json: {error: "There was an error creating your project"}
     end
   end
@@ -43,19 +36,12 @@ class Api::V1::ProjectsController < ApplicationController
     else
       render json: { errors: "Unable to find that user"}, status: :unprocessible_entity
     end
-    # user = User.find_by(email: project_params[:user_email])
-    # @project.update(project_params)
-    # if @project.save
-    #   render json: @project, status: :accepted
-    # else
-    #   render json: { errors: @project.errors.full_messages }, status: :unprocessible_entity
-    # end
   end
 
   private
 
   def project_params
-    params.permit(:title, :user_id, :video)
+    params.permit(:title, :user_id, :video, :video_url, :user_email)
   end
 
   def find_project
