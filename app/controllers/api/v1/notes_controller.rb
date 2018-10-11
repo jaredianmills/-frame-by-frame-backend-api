@@ -14,7 +14,10 @@ class Api::V1::NotesController < ApplicationController
     @note = Note.new(note_params)
     if @note.save
       render json: @note
-      ActionCable.server.broadcast 'notes_channel', json: @note
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+          NoteSerializer.new(@note)
+        ).serializable_hash
+      ActionCable.server.broadcast 'notes_channel', serialized_data
     else
       render json: { errors: @note.errors.full_messages }, status: :unprocessible_entity
     end
