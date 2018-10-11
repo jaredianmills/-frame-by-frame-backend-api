@@ -14,6 +14,7 @@ class Api::V1::CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     if @comment.save
       render json: @comment
+      ActionCable.server.broadcast 'comments_channel', json: @comment
     else
       render json: {errors: "There was an error creating your comment"}
     end

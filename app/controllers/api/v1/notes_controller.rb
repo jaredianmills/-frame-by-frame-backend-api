@@ -14,8 +14,8 @@ class Api::V1::NotesController < ApplicationController
     @note = Note.new(note_params)
     if @note.save
       render json: @note
+      ActionCable.server.broadcast 'notes_channel', json: @note
     else
-      # render json: {errors: "There was an error creating your note"}
       render json: { errors: @note.errors.full_messages }, status: :unprocessible_entity
     end
   end
