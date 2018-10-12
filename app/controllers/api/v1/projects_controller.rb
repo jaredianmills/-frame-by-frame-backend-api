@@ -9,10 +9,10 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     render json: @project
-    serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        ProjectSerializer.new(@project)
-      ).serializable_hash
-    ActionCable.server.broadcast 'projects_channel', serialized_data
+    # serialized_data = ActiveModelSerializers::Adapter::Json.new(
+    #     ProjectSerializer.new(@project)
+    #   ).serializable_hash
+    # ActionCable.server.broadcast 'projects_channel', serialized_data
   end
 
   def create

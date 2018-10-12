@@ -14,7 +14,10 @@ class Api::V1::CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     if @comment.save
       render json: @comment
-      ActionCable.server.broadcast 'comments_channel', json: @comment
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+          CommentSerializer.new(@comment)
+        ).serializable_hash
+      ActionCable.server.broadcast 'comments_channel', serialized_data
     else
       render json: {errors: "There was an error creating your comment"}
     end
